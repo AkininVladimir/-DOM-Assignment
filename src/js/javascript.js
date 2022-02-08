@@ -14,9 +14,9 @@ let budgetValue = document.getElementsByClassName ('budget-value')[0],
 // - Получить поля (input) c обязательными расходами через класс (class=”expenses-item”)
 let expensesItem = document.getElementsByTagName ('input');
 // - Получить кнопки “Утвердить” и “Рассчитать” через Tag, каждую в своей переменной
-let expensesItemBtn = document.getElementsByTagName ('button')[0],
-    optionalExpensesBtn = document.getElementsByTagName ('button')[1],
-    countBudgetBtn = document.getElementsByTagName('button')[2];
+let expensesItemBtn = document.getElementsByTagName ('button') [0],
+    optionalExpensesBtn = document.getElementsByTagName ('button') [1],
+    countBudgetBtn = document.getElementsByTagName('button') [2];
 // - Получить поля для ввода необязательных расходов (optionalexpenses-item) при помощи querySelectorAll
 let optionalExpensesItem = document.getElementsByClassName ('optionalexpenses-item'),
     expenseItem = document.getElementsByClassName ('expenses-item');
@@ -31,6 +31,15 @@ let chooseIncome = document.querySelector('.choose-income'),
     monthSavingsValue = document.querySelector('.monthsavings-value'),
     yearSavingsValue = document.querySelector('.yearsavings-value');
   
+
+
+expensesItemBtn.disabled = true;
+optionalExpensesBtn.disabled = true;
+countBudgetBtn.disabled = true;
+// expensesItemBtn.disable = false;
+// optionalExpensesBtn.disable = false;
+// countBudgetBtn.disable = false;
+
 let time, money;
 
 startBtn.addEventListener ('click', function (){
@@ -39,14 +48,18 @@ startBtn.addEventListener ('click', function (){
         while (isNaN(money) || money == "" || money == null) {
              money = + prompt('Ваш бюджет на месяц?', '');
         }
-appData.timeData = time;
-yearValue.value = new Date(Date.parse(time)).getFullYear();
-monthValue.value = new Date(Date.parse(time)).getMonth() +1;
-dayValue.value = new Date(Date.parse(time)).getDate();
-appData.budget = money;
-budgetValue.textContent = money.toFixed(2);
-
+    appData.timeData = time;
+    yearValue.value = new Date(Date.parse(time)).getFullYear();
+    monthValue.value = new Date(Date.parse(time)).getMonth() +1;
+    dayValue.value = new Date(Date.parse(time)).getDate();
+    appData.budget = money;
+    budgetValue.textContent = money.toFixed(2);
+    expensesItemBtn.disabled = false;
+    optionalExpensesBtn.disabled = false;
+    countBudgetBtn.disabled = false;
 });
+
+
 
 expensesItemBtn.addEventListener ('click', function(){
     let sum = 0;
@@ -75,10 +88,12 @@ optionalExpensesBtn. addEventListener ('click', function (){
     }
     
 });
+// Реализовать функционал: при расчете дневного бюджета учитывать сумму обязательных трат 
+// (т. e. от бюджета на месяц отнимаем общую сумму всех обяз. трат и ее делим на 30 дней)
 
 countBudgetBtn.addEventListener ('click', function(){
     if (appData.budget != undefined) {
-        appData.moneyForday = appData.budget / 30;
+        appData.moneyForday = appData.budget / 30 + +expensesValue.textContent/30;
         daybudgetValue.textContent = appData.moneyForday.toFixed(2);
         if (appData.moneyForday <1000 ){
             levelValue.textContent = 'Ниже прожиточного минимума';
